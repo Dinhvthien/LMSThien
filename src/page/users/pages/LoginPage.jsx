@@ -14,18 +14,16 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const response = await axios.post(
-        `${apiUrl}/lms/auth/token`,
-        {
-          username,
-          password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+  const response = await fetch(`${apiUrl}/lms/auth/token`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    username,
+    password,
+  }),
+});
 
       const token = response.data.result.token;
       localStorage.setItem("token", token);
