@@ -32,7 +32,7 @@ const ContentList = () => {
 
   const fetchContent = async (type, typeFilter, page) => {
     try {
-      const response = await axios.get(`http://localhost:8080/lms/doc/${type}s`, {
+      const response = await axios.get(`${apiUrl}/lms/doc/${type}s`, {
         params: { status: 'PUBLIC', page, size: 10, [`${type}Type`]: typeFilter },
       });
       setItems(response.data.content);
