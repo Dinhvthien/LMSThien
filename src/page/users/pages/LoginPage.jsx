@@ -13,25 +13,38 @@ export default function LoginPage() {
     setError("");
 
     try {
-  const response = await fetch(`${apiUrl}/lms/auth/token`, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    username,
-    password,
-  }),
-});
+      const response = await fetch(`${apiUrl}/lms/auth/token`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+      });
 
-      const token = response.data.result.token;
+      // Kiểm tra xem phản hồi có thành công không
+      if (!response.ok) {
+        throw new Error(`Lỗi HTTP! Trạng thái: ${response.status}`);
+      }
+
+      // Phân tích cú pháp thân phản hồi
+      const data = await response.json();
+      console.log("Phản hồi API:", data); // Ghi log để kiểm tra cấu trúc phản hồi
+
+      // Kiểm tra cấu trúc phản hồi
+      if (!data?.result?.token) {
+        throw new Error("Cấu trúc phản hồi không hợp lệ: Không tìm thấy token");
+      }
+
+      const token = data.result.token;
       localStorage.setItem("token", token);
 
-      // Cập nhật cart từ localStorage vào database
+      // Đồng bộ giỏ hàng từ localStorage vào database
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      if (cart.length === 0); // Giỏ hàng trống thì không đồng bộ
-      const courseId = cart.map((item) => item.id); // Lấy danh sách courseId
       if (cart.length > 0) {
+        const courseIds = cart.map((item) => item.id); // Lấy danh sách courseId
         try {
           await fetch(`${apiUrl}/lms/carts/sync`, {
             method: "POST",
@@ -39,31 +52,33 @@ export default function LoginPage() {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({ courseId }),
+            body: JSON.stringify({ courseIds }), // Sử dụng tên biến chính xác
           });
           localStorage.removeItem("cart");
         } catch (cartError) {
-          console.error("Failed to update cart:", cartError);
+          console.error("Không thể cập nhật giỏ hàng:", cartError);
           setError("Đăng nhập thành công, nhưng không thể cập nhật giỏ hàng.");
         }
       }
 
-      // Giải mã phần payload từ token
+      // Giải mã payload từ token
       const base64Payload = token.split(".")[1];
       const decodedPayload = JSON.parse(atob(base64Payload));
       let role = "user"; // Giá trị mặc định
       if (decodedPayload.scope && decodedPayload.scope.includes("_")) {
         role = decodedPayload.scope.split("_")[1].toLowerCase();
       }
-      console.log("role", role);
+      console.log("Vai trò:", role);
+
+      // Điều hướng dựa trên vai trò
       if (role === "admin") {
         navigate("/admin/dashboard");
       } else {
         navigate("/home");
       }
     } catch (err) {
-      setError("Đăng nhập thất bại. Vui lòng kiểm tra lại tài khoản.");
-      console.error("Login failed:", err);
+      setError("Đăng nhập thất bại. Vui lòng kiểm tra lại tài khoản hoặc mật khẩu.");
+      console.error("Đăng nhập thất bại:", err);
     }
   };
 
