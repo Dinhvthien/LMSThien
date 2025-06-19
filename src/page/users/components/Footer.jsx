@@ -38,14 +38,7 @@ const Footer = () => {
           </div>
           
           <div>
-            <h3 className="text-xl font-bold mb-4">Liên kết</h3>
-            <ul className="space-y-3">
-              <li><a href="#home" className="text-mono-400 hover:text-mono-100 transition-colors">Trang chủ</a></li>
-              <li><a href="#experience" className="text-mono-400 hover:text-mono-100 transition-colors">Kinh nghiệm</a></li>
-              <li><a href="#projects" className="text-mono-400 hover:text-mono-100 transition-colors">Dự án</a></li>
-              <li><a href="#testimonials" className="text-mono-400 hover:text-mono-100 transition-colors">Đánh giá</a></li>
-              <li><a href="#contact" className="text-mono-400 hover:text-mono-100 transition-colors">Liên hệ</a></li>
-            </ul>
+    
           </div>
           
           <div>

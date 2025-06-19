@@ -18,18 +18,6 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
         <ul>
           <li>
             <NavLink
-              to="/admin/dashboard"
-              end
-              className={({ isActive }) =>
-                `block p-4 hover:bg-gray-800 ${isActive ? "bg-gray-700" : ""}`
-              }
-            >
-              <span className="text-2xl w-8 pr-3">🏠</span>
-              {!isCollapsed && <span>Dashboard</span>}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
               to="/admin/users"
               className={({ isActive }) =>
                 `block p-4 hover:bg-gray-800 ${isActive ? "bg-gray-700" : ""}`
@@ -58,7 +46,18 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
               }
             >
               <span className="text-2xl w-8 pr-3">⚙️</span>
-              {!isCollapsed && <span>Settings</span>}
+              {!isCollapsed && <span>Document</span>}
+            </NavLink>
+          </li>
+                    <li>
+            <NavLink
+              to="/admin/settings"
+              className={({ isActive }) =>
+                `block p-4 hover:bg-gray-800 ${isActive ? "bg-gray-700" : ""}`
+              }
+            >
+              <span className="text-2xl w-8 pr-3">⚙️</span>
+              {!isCollapsed && <span>video</span>}
             </NavLink>
           </li>
         </ul>
