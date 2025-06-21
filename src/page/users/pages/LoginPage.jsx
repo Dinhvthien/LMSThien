@@ -24,61 +24,88 @@ export default function LoginPage() {
         }),
       });
 
-      // Kiểm tra xem phản hồi có thành công không
+      // Kiểm tra phản hồi HTTP
       if (!response.ok) {
-        throw new Error(`Lỗi HTTP! Trạng thái: ${response.status}`);
+        const errorData = await response.json().catch(() => null);
+        throw new Error(
+          errorData?.message || `Lỗi HTTP! Trạng thái: ${response.status}`
+        );
       }
 
-      // Phân tích cú pháp thân phản hồi
+      // Phân tích phản hồi
       const data = await response.json();
-      console.log("Phản hồi API:", data); // Ghi log để kiểm tra cấu trúc phản hồi
+      console.log("Phản hồi API:", data);
 
-      // Kiểm tra cấu trúc phản hồi
+      // Kiểm tra token
       if (!data?.result?.token) {
-        throw new Error("Cấu trúc phản hồi không hợp lệ: Không tìm thấy token");
+        throw new Error("Không tìm thấy token trong phản hồi");
       }
 
       const token = data.result.token;
       localStorage.setItem("token", token);
 
-      // Đồng bộ giỏ hàng từ localStorage vào database
+      // Đồng bộ giỏ hàng
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
       if (cart.length > 0) {
-        const courseIds = cart.map((item) => item.id); // Lấy danh sách courseId
+        const courseIds = cart.map((item) => item.id);
         try {
-          await fetch(`${apiUrl}/lms/carts/sync`, {
+          const cartResponse = await fetch(`${apiUrl}/lms/carts/sync`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({ courseIds }), // Sử dụng tên biến chính xác
+            body: JSON.stringify({ courseIds }),
           });
+          if (!cartResponse.ok) {
+            throw new Error("Không thể đồng bộ giỏ hàng");
+          }
           localStorage.removeItem("cart");
         } catch (cartError) {
-          console.error("Không thể cập nhật giỏ hàng:", cartError);
-          setError("Đăng nhập thành công, nhưng không thể cập nhật giỏ hàng.");
+          console.error("Không thể đồng bộ giỏ hàng:", cartError);
+          setError("Đăng nhập thành công, nhưng không thể đồng bộ giỏ hàng.");
         }
       }
 
-      // Giải mã payload từ token
-      const base64Payload = token.split(".")[1];
-      const decodedPayload = JSON.parse(atob(base64Payload));
-      let role = "user"; // Giá trị mặc định
-      if (decodedPayload.scope && decodedPayload.scope.includes("_")) {
-        role = decodedPayload.scope.split("_")[1].toLowerCase();
-      }
-      console.log("Vai trò:", role);
+      // Giải mã payload JWT
+      try {
+        const base64Payload = token.split(".")[1];
+        if (!base64Payload) {
+          throw new Error("Token không có payload hợp lệ");
+        }
 
-      // Điều hướng dựa trên vai trò
-      if (role === "admin") {
-        navigate("/admin/dashboard");
-      } else {
+        // Thêm padding Base64 nếu cần
+        const paddedPayload = base64Payload.padEnd(
+          base64Payload.length + ((4 - (base64Payload.length % 4)) % 4),
+          "="
+        );
+
+        // Giải mã payload
+        const decodedPayload = JSON.parse(atob(paddedPayload));
+        console.log("Payload giải mã:", decodedPayload);
+
+        // Xác định vai trò
+        let role = "user";
+        if (decodedPayload.scope && decodedPayload.scope.includes("_")) {
+          role = decodedPayload.scope.split("_")[1].toLowerCase();
+        }
+        console.log("Vai trò:", role);
+
+        // Điều hướng
+        if (role === "admin") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/home");
+        }
+      } catch (decodeError) {
+        console.error("Lỗi giải mã token:", decodeError);
+        // Vẫn cho phép đăng nhập, nhưng điều hướng mặc định
+        setError("Đăng nhập thành công, nhưng không thể xác định vai trò.");
         navigate("/home");
       }
     } catch (err) {
-      setError("Đăng nhập thất bại. Vui lòng kiểm tra lại tài khoản hoặc mật khẩu.");
-      console.error("Đăng nhập thất bại:", err);
+      setError("Đăng nhập thất bại. Vui lòng kiểm tra tài khoản hoặc mật khẩu.");
+      console.error("Lỗi đăng nhập:", err.message);
     }
   };
 
