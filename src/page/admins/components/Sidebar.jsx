@@ -40,7 +40,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
           </li>
           <li>
             <NavLink
-              to="/admin/settings"
+              to="/admin/document"
               className={({ isActive }) =>
                 `block p-4 hover:bg-gray-800 ${isActive ? "bg-gray-700" : ""}`
               }
@@ -51,7 +51,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
           </li>
                     <li>
             <NavLink
-              to="/admin/settings"
+              to="/admin/video"
               className={({ isActive }) =>
                 `block p-4 hover:bg-gray-800 ${isActive ? "bg-gray-700" : ""}`
               }

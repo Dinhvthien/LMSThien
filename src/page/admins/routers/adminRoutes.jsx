@@ -5,6 +5,8 @@ import ManageCourses from '../pages/ManageCourses';
 import ManageUsers from '../pages/ManageUsers';
 import CourseEdit from '../../admins/components/CourseEdit';
 import CourseCreate from '../../admins/components/CourseCreate';
+import ManageVideos from '../pages/ManageVideos';
+import ManageDocuments from '../pages/ManageDocuments';
 export const adminRoutes = [
   {
     path: '/admin/dashboard',
@@ -19,6 +21,23 @@ export const adminRoutes = [
     element: (
       <AdminLayout>
         <ManageCourses />
+      </AdminLayout>
+    ),
+  },
+  {
+    path: '/admin/video',
+    element: (
+      <AdminLayout>
+        <ManageVideos />
+      </AdminLayout>
+    ),
+  },
+  
+  {
+    path: '/admin/document',
+    element: (
+      <AdminLayout>
+        <ManageDocuments />
       </AdminLayout>
     ),
   },
