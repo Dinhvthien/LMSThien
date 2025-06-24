@@ -24,7 +24,7 @@ import {
 } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
 
-const API_BASE_URL = 'http://localhost:8080';
+const API_BASE_URL =  import.meta.env.VITE_API_URL;
 
 // Hàm lấy Bearer Token (thay đổi theo cách bạn lưu token)
 const getAuthToken = () => {
