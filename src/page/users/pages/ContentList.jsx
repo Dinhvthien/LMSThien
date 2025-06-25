@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import VideoModal from '../components/VideoModal';
 import Pagination from '../components/Pagination';
+
 function debounce(func, wait) {
   let timeout;
   return (...args) => {
@@ -9,6 +10,7 @@ function debounce(func, wait) {
     timeout = setTimeout(() => func(...args), wait);
   };
 }
+
 // URL API từ env
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -22,12 +24,10 @@ const convertToEmbedUrl = (url) => {
     console.warn('videoUrl is empty or undefined');
     return '';
   }
-  // Nếu đã là URL embed, giữ nguyên
   if (url.includes('youtube.com/embed/')) {
     console.log('URL already in embed format:', url);
     return url;
   }
-  // Nếu là URL watch, chuyển thành embed
   const videoIdMatch = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
   const videoId = videoIdMatch ? videoIdMatch[1] : '';
   if (!videoId) {
@@ -41,33 +41,31 @@ const convertToEmbedUrl = (url) => {
 
 // Component skeleton cho loading
 const ItemSkeleton = () => (
-  <div className="flex items-center justify-between bg-white p-4 rounded-lg shadow-md border border-gray-200 animate-pulse mb-4">
-    <div className="flex items-center space-x-4 flex-1">
-      <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
-      <div className="flex-1 space-y-2">
-        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-        <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+  <div className="flex items-center justify-between bg-white p-2 sm:p-3 rounded-lg shadow-sm border border-gray-200 animate-pulse mb-2 sm:mb-3">
+    <div className="flex items-center space-x-2 sm:space-x-3 flex-1">
+      <div className="w-5 h-5 sm:w-6 sm:h-6 bg-gray-200 rounded-full"></div>
+      <div className="flex-1 space-y-1 sm:space-y-2">
+        <div className="h-3 sm:h-4 bg-gray-200 rounded w-3/4"></div>
+        <div className="h-2 sm:h-3 bg-gray-200 rounded w-1/2"></div>
       </div>
     </div>
-    <div className="h-4 bg-gray-200 rounded w-16"></div>
+    <div className="h-3 sm:h-4 bg-gray-200 rounded w-12 sm:w-16"></div>
   </div>
 );
 
 const ContentList = () => {
-  // State quản lý nội dung và bộ lọc
-  const [contentType, setContentType] = useState('video'); // 'video' hoặc 'document'
-  const [items, setItems] = useState([]); // Danh sách video/tài liệu
-  const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại (1-based cho UI)
-  const [totalPages, setTotalPages] = useState(0); // Tổng số trang
-  const [selectedVideo, setSelectedVideo] = useState(null); // Video được chọn để xem
-  const [videoTypes, setVideoTypes] = useState([]); // Danh sách loại video
-  const [documentTypes, setDocumentTypes] = useState([]); // Danh sách loại tài liệu
-  const [selectedType, setSelectedType] = useState(''); // Loại video/tài liệu được chọn
-  const [search, setSearch] = useState(''); // Từ khóa tìm kiếm
-  const [isLoading, setIsLoading] = useState(false); // Trạng thái loading
-  const [error, setError] = useState(''); // Thông báo lỗi
+  const [contentType, setContentType] = useState('video');
+  const [items, setItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [videoTypes, setVideoTypes] = useState([]);
+  const [documentTypes, setDocumentTypes] = useState([]);
+  const [selectedType, setSelectedType] = useState('');
+  const [search, setSearch] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  // Lấy danh sách loại video và tài liệu
   const fetchTypes = async () => {
     try {
       const [videoTypesRes, documentTypesRes] = await Promise.all([
@@ -82,7 +80,6 @@ const ContentList = () => {
     }
   };
 
-  // Lấy danh sách video hoặc tài liệu
   const fetchContent = async (type, typeFilter, searchQuery, page) => {
     setIsLoading(true);
     setError('');
@@ -90,14 +87,14 @@ const ContentList = () => {
       const response = await axios.get(`${API_URL}/lms/${type}s`, {
         params: {
           status: 'PUBLIC',
-          page, // 0-based cho API
+          page,
           size: 10,
           search: searchQuery || undefined,
           [`${type}IdType`]: typeFilter || undefined,
         },
       });
       const content = response.data.result.content || [];
-      console.log('API response content:', content); 
+      console.log('API response content:', content);
       setItems(
         content.map((item) => ({
           ...item,
@@ -115,29 +112,25 @@ const ContentList = () => {
     }
   };
 
-  // Debounce tìm kiếm
   const debouncedSearch = useCallback(
     debounce((type, typeFilter, query) => {
       fetchContent(type, typeFilter, query, 0);
-      setCurrentPage(1); // Reset về trang 1
+      setCurrentPage(1);
     }, 500),
     []
   );
 
-  // Tải dữ liệu khi thay đổi contentType hoặc selectedType
   useEffect(() => {
     fetchTypes();
     fetchContent(contentType, selectedType, search, currentPage - 1);
   }, [contentType, selectedType, currentPage]);
 
-  // Xử lý tìm kiếm
   const handleSearchChange = (e) => {
     const query = e.target.value;
     setSearch(query);
     debouncedSearch(contentType, selectedType, query);
   };
 
-  // Xử lý thay đổi content type
   const handleContentTypeChange = (type) => {
     setContentType(type);
     setSelectedType('');
@@ -145,15 +138,13 @@ const ContentList = () => {
     setCurrentPage(1);
   };
 
-  // Xử lý thay đổi loại
   const handleTypeChange = (e) => {
     setSelectedType(e.target.value);
     setCurrentPage(1);
   };
 
-  // Xử lý click vào item
   const handleItemClick = (item) => {
-    console.log('Clicked item:', item); 
+    console.log('Clicked item:', item);
     if (contentType === 'video') {
       if (!item.videoUrl) {
         setError('URL video không hợp lệ hoặc không tồn tại.');
@@ -170,20 +161,17 @@ const ContentList = () => {
   };
 
   return (
-    <div className="pt-20 pb-20 max-w-7xl mx-auto p-6 bg-gray-100 min-h-screen">
-      {/* Header */}
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">
+    <div className="pt-4 sm:pt-20 pb-4 sm:pb-20 max-w-7xl mx-auto px-2 sm:px-6 bg-gray-100 min-h-screen">
+      <h1 className="text-lg sm:text-3xl font-bold text-gray-800 mb-2 sm:mb-6">
         {contentType === 'video' ? 'Danh sách Video' : 'Danh sách Tài liệu'}
       </h1>
 
-      {/* Bộ lọc và tìm kiếm */}
-      <div className="flex flex-col sm:flex-row items-center justify-between mb-8 space-y-4 sm:space-y-0 sm:space-x-4 bg-white p-4 rounded-lg shadow-sm">
-        {/* Nút chuyển đổi */}
-        <div className="flex space-x-2">
+      <div className="flex flex-col sm:flex-row items-center justify-between mb-2 sm:mb-6 space-y-2 sm:space-y-0 sm:space-x-3 bg-white p-2 sm:p-3 rounded-lg shadow-sm">
+        <div className="flex space-x-1 sm:space-x-2">
           <button
-            className={`px-4 py-2 rounded-lg font-semibold transition-all duration-200 ${
+            className={`px-2 sm:px-3 py-1 sm:py-2 rounded-md font-semibold text-xs sm:text-sm transition-all duration-200 ${
               contentType === 'video'
-                ? 'bg-blue-600 text-white shadow-md'
+                ? 'bg-blue-600 text-white'
                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
             }`}
             onClick={() => handleContentTypeChange('video')}
@@ -191,9 +179,9 @@ const ContentList = () => {
             Video
           </button>
           <button
-            className={`px-4 py-2 rounded-lg font-semibold transition-all duration-200 ${
+            className={`px-2 sm:px-3 py-1 sm:py-2 rounded-md font-semibold text-xs sm:text-sm transition-all duration-200 ${
               contentType === 'document'
-                ? 'bg-blue-600 text-white shadow-md'
+                ? 'bg-blue-600 text-white'
                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
             }`}
             onClick={() => handleContentTypeChange('document')}
@@ -202,20 +190,18 @@ const ContentList = () => {
           </button>
         </div>
 
-        {/* Thanh tìm kiếm */}
         <input
           type="text"
           value={search}
           onChange={handleSearchChange}
           placeholder={`Tìm kiếm ${contentType === 'video' ? 'video' : 'tài liệu'}...`}
-          className="w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+          className="w-full sm:w-60 px-2 sm:px-3 py-1 sm:py-2 border border-gray-300 rounded-md bg-white text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
         />
 
-        {/* Bộ lọc loại */}
         <select
           value={selectedType}
           onChange={handleTypeChange}
-          className="w-full sm:w-48 px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+          className="w-full sm:w-44 px-2 sm:px-3 py-1 sm:py-2 border border-gray-300 rounded-md bg-white text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
         >
           <option value="">Tất cả</option>
           {(contentType === 'video' ? videoTypes : documentTypes).map((type) => (
@@ -226,62 +212,62 @@ const ContentList = () => {
         </select>
       </div>
 
-      {/* Thông báo lỗi */}
       {error && (
-        <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
+        <div className="mb-2 sm:mb-4 p-2 sm:p-3 bg-red-100 text-red-700 text-sm rounded-lg">
           {error}
         </div>
       )}
 
-      {/* Danh sách nội dung dạng hàng ngang */}
-      <div className="space-y-4">
+      <div className="space-y-2 sm:space-y-3">
         {isLoading ? (
-          // Hiển thị skeleton khi loading
           Array.from({ length: 6 }).map((_, index) => (
             <ItemSkeleton key={index} />
           ))
         ) : items.length === 0 ? (
-          <div className="text-center text-gray-500 py-10">
+          <div className="text-center text-gray-500 py-2 sm:py-6 text-sm">
             Không tìm thấy {contentType === 'video' ? 'video' : 'tài liệu'}.
           </div>
         ) : (
           items.map((item) => (
             <div
               key={item.id}
-              className="flex items-center justify-between bg-white p-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-200 cursor-pointer border border-gray-200"
+              className="flex items-center justify-between bg-white p-2 sm:p-3 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer border border-gray-200"
               onClick={() => handleItemClick(item)}
             >
-              <div className="flex items-center space-x-4 flex-1">
-                {/* Logo */}
+              <div className="flex items-center space-x-1 sm:space-x-3 flex-1 max-w-[80%] sm:max-w-[85%]">
                 <img
                   src={contentType === 'video' ? YOUTUBE_LOGO : DRIVE_LOGO}
                   alt={contentType === 'video' ? 'YouTube' : 'Google Drive'}
-                  className="w-6 h-6"
+                  className="w-5 h-5 sm:w-6 h-6"
                 />
-                {/* Thông tin */}
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-800 truncate">{item.title || 'N/A'}</h3>
+                <div className="flex-1 overflow-hidden">
+                  <h3 className="text-sm sm:text-base font-semibold text-gray-800 truncate overflow-hidden line-clamp-2">
+                    {item.title || 'N/A'}
+                  </h3>
                   {contentType === 'video' ? (
-                    <p className="text-gray-600 text-sm">Thời lượng: {item.duration ? `${item.duration} phút` : 'N/A'}</p>
+                    <p className="text-gray-600 text-xs sm:text-sm truncate">
+                      Thời lượng: {item.duration ? `${item.duration} phút` : 'N/A'}
+                    </p>
                   ) : (
-                    <p className="text-gray-600 text-sm">
+                    <p className="text-gray-600 text-xs sm:text-sm truncate">
                       Loại: {documentTypes.find((type) => type.id === item.documentIdType)?.name || 'N/A'}
                     </p>
                   )}
                 </div>
               </div>
-              {/* Nút hành động */}
-              <span className="text-blue-500 text-sm font-medium hover:underline">
+              <button
+                className="text-blue-600 text-xs sm:text-sm font-medium hover:underline"
+                onClick={() => handleItemClick(item)}
+              >
                 {contentType === 'video' ? 'Xem video' : 'Mở tài liệu'}
-              </span>
+              </button>
             </div>
           ))
         )}
       </div>
 
-      {/* Phân trang */}
       {totalPages > 0 && (
-        <div className="mt-8 flex justify-center">
+        <div className="mt-2 sm:mt-6 flex justify-center">
           <Pagination
             totalPages={totalPages}
             currentPage={currentPage}
@@ -290,7 +276,6 @@ const ContentList = () => {
         </div>
       )}
 
-      {/* Modal cho video */}
       {selectedVideo && (
         <VideoModal video={selectedVideo} onClose={() => setSelectedVideo(null)} />
       )}

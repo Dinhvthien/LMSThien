@@ -4,7 +4,6 @@ import SearchBar from './SearchBar';
 import CategoryFilter from './CategoryFilter';
 import Pagination from './Pagination';
 
-
 const CourseList = () => {
   const [courses, setCourses] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -49,19 +48,17 @@ const CourseList = () => {
   }, [currentPage, searchQuery, category]);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+    <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
+      <div className="flex flex-row items-center gap-2 sm:gap-4 mb-4 sm:mb-8">
         <SearchBar setSearchQuery={setSearchQuery} />
-        <div className="flex items-center gap-4">
-          <CategoryFilter setCategory={setCategory} />
-        </div>
+        <CategoryFilter setCategory={setCategory} />
       </div>
 
-      {error && <p className="text-red-500 text-center mb-6">{error}</p>}
+      {error && <p className="text-red-500 text-center mb-4 sm:mb-6 text-sm">{error}</p>}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {courses.length === 0 && !error ? (
-          <p className="text-gray-500 text-center col-span-full">Không tìm thấy khóa học nào.</p>
+          <p className="text-gray-500 text-center col-span-full text-sm">Không tìm thấy khóa học nào.</p>
         ) : (
           courses.map((course) => <CourseCard key={course.id} course={course} />)
         )}

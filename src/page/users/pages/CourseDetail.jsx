@@ -23,12 +23,12 @@ export default function CourseDetail() {
   }, []);
 
   return (
-    <div className="flex h-auto mb-20">
+    <div className="flex flex-col md:flex-row h-auto mb-4 sm:mb-20">
       {data ? (
         <CourseSideVideo courseList={data} selectedVideoUrl={videoUrl} isEnrolled={isEnrolled} />
       ) : (
-        <div className="w-3/4 h-screen m-2 flex items-center justify-center">
-          <p>Đang tải dữ liệu...</p>
+        <div className="w-full md:w-3/4 h-64 sm:h-screen m-1 sm:m-2 flex items-center justify-center">
+          <p className="text-base sm:text-lg">Đang tải dữ liệu...</p>
         </div>
       )}
       <CourseSidebar

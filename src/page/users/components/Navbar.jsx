@@ -140,6 +140,7 @@ const Navbar = () => {
               { to: "/home", label: "Trang chủ" },
               { to: "/course", label: "Khóa Học" },
               { to: "/document", label: "Tài Liệu" },
+               { to: "/login", label: "Đăng nhập" },
             ].map((item) => (
               <Link
                 key={item.to}

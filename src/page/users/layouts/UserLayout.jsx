@@ -5,7 +5,7 @@ const UserLayout = ({ children }) => {
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar />
-      <main className="pt-16 pr-20 pl-20">{children}</main>
+      <main className="pt-16">{children}</main>
       <Footer/>
     </div>
   );

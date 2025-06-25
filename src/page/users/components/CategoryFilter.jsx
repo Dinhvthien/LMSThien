@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-
 const CategoryFilter = ({ setCategory }) => {
   const [courseTypes, setCourseTypes] = useState([]);
   const [error, setError] = useState('');
@@ -9,7 +8,7 @@ const CategoryFilter = ({ setCategory }) => {
   useEffect(() => {
     const loadCourseTypes = async () => {
       try {
-       const response = await fetch(`${apiUrl}/lms/course-types`, {
+        const response = await fetch(`${apiUrl}/lms/course-types`, {
           headers: { Accept: 'application/json' },
         });
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -30,11 +29,11 @@ const CategoryFilter = ({ setCategory }) => {
 
   return (
     <div className="relative">
-      {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+      {error && <p className="text-red-500 text-sm mb-1">{error}</p>}
       <select
         id="category-filter"
         onChange={handleChange}
-        className="px-4 py-2 w-50 border cursor-pointer border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600 appearance-none bg-white"
+        className="px-3 py-1 sm:py-2 w-32 sm:w-40 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600 appearance-none bg-white text-sm sm:text-base"
       >
         <option value="all">Tất cả</option>
         {courseTypes.map((type) => (
@@ -44,7 +43,7 @@ const CategoryFilter = ({ setCategory }) => {
         ))}
       </select>
       <svg
-        className="w-5 h-5 absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+        className="w-4 h-4 sm:w-5 sm:h-5 absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
