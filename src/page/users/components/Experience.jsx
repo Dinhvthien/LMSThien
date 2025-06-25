@@ -49,16 +49,23 @@ return (
               <div className="space-y-8">
                 <div className="relative pl-8 before:absolute before:left-0 before:top-1 before:h-full before:w-0.5 before:bg-mono-700">
                   <div className="absolute left-0 top-1 w-2 h-2 rounded-full bg-mono-100 -translate-x-[3px]"></div>
-                  <h4 className="text-xl font-bold">Senior Developer</h4>
-                  <p className="text-mono-400">Công ty ABC • 2020 - Hiện tại</p>
-                  <p className="mt-2 text-mono-300">Phát triển và duy trì các ứng dụng web quy mô lớn, quản lý team 5 người.</p>
+                  <h4 className="text-xl font-bold">Thực tập tại solanar</h4>
+                  <p className="text-mono-400">Công ty Solanar • 2024</p>
+                  <p className="mt-2 text-mono-300">Phát triển web site block chain.</p>
                 </div>
                 
                 <div className="relative pl-8 before:absolute before:left-0 before:top-1 before:h-full before:w-0.5 before:bg-mono-700">
                   <div className="absolute left-0 top-1 w-2 h-2 rounded-full bg-mono-100 -translate-x-[3px]"></div>
-                  <h4 className="text-xl font-bold">Developer</h4>
-                  <p className="text-mono-400">Công ty XYZ • 2018 - 2020</p>
-                  <p className="mt-2 text-mono-300">Phát triển các ứng dụng web với ASP.NET và Angular.</p>
+                  <h4 className="text-xl font-bold">Website Thương mại điện tử</h4>
+                  <p className="text-mono-400">Dự án cá nhân</p>
+                  <p className="mt-2 text-mono-300">Phát triển web site thương mại điện từ với asp.net với mô hình MVC</p>
+                </div>
+                                <div className="relative pl-8 before:absolute before:left-0 before:top-1 before:h-full before:w-0.5 before:bg-mono-700">
+                  <div className="absolute left-0 top-1 w-2 h-2 rounded-full bg-mono-100 -translate-x-[3px]"></div>
+                  <h4 className="text-xl font-bold">E-learning Website</h4>
+                  <p className="text-mono-400">Dự án cá nhân</p>
+                  <p className="mt-2 text-mono-300">Phát triển với ngôn ngữ java spring boot 3, react js và docker</p>
+                  <p className="mt-2 text-mono-300"> Link web: <a href="https://www.dinhvanthien.shop">dinhvanthien.shop</a></p>
                 </div>
               </div>
             </div>

@@ -28,7 +28,7 @@ return (
           <div className="order-1 md:order-2 flex justify-center md:justify-end">
             <div className="relative w-72 h-72 md:w-96 md:h-96 rounded-full overflow-hidden border-8 border-mono-200">
               <img 
-                src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1520&q=80" 
+                src="https://i.postimg.cc/2ys3qLpN/Swapfaces-AI-795092e5-5391-4c1d-bc2c-524fde27c8d8.png"
                 alt="Đinh Văn Thiện" 
                 className="w-full h-full object-cover grayscale"
               />

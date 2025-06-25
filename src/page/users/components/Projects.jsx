@@ -18,8 +18,8 @@ const projects = [
     url: '#'
   },
   {
-    title: 'Healthcare App',
-    description: 'Ứng dụng quản lý y tế với tính năng đặt lịch khám, quản lý hồ sơ bệnh án, và thông báo.',
+    title: 'Website Quản lý học tập',
+    description: 'Website LMS (Hệ thống quản lý học tập) là nền tảng trực tuyến hỗ trợ việc tạo, quản lý và theo dõi các khóa học.',
     technologies: ['React Native', 'Node.js', 'MongoDB'],
     image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1520&q=80',
     url: '#'

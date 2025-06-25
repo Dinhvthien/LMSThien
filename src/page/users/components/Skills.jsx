@@ -3,18 +3,18 @@ import React from 'react';
 const testimonials = [
   {
     content: "Đinh Văn Thiện là một lập trình viên tài năng với khả năng giải quyết vấn đề xuất sắc. Anh ấy đã giúp dự án của chúng tôi hoàn thành đúng thời hạn với chất lượng cao.",
-    author: "Nguyễn Văn A",
-    title: "CEO, Công ty XYZ"
+    author: "",
+    title: ""
   },
   {
     content: "Làm việc với Thiện là một trải nghiệm tuyệt vời. Anh ấy không chỉ có kiến thức chuyên môn sâu rộng mà còn rất tận tâm và có trách nhiệm với công việc.",
-    author: "Trần Thị B",
-    title: "Project Manager, Công ty ABC"
+    author: "",
+    title: ""
   },
   {
     content: "Thiện là một đồng nghiệp tuyệt vời. Anh ấy luôn sẵn sàng chia sẻ kiến thức và hỗ trợ team khi cần thiết. Code của anh ấy luôn sạch sẽ và dễ bảo trì.",
-    author: "Lê Văn C",
-    title: "Senior Developer, Công ty DEF"
+    author: "",
+    title: ""
   }
 ];
 
