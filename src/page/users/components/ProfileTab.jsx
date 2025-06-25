@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const ProfileTab = () => {
+  const DEFAULT_AVATAR_URL = "https://static.vecteezy.com/system/resources/previews/019/879/186/non_2x/user-icon-on-transparent-background-free-png.png";
+
   const [user, setUser] = useState({
     fullName: "",
     email: "",
     phone: "",
     address: "",
     birthDate: "",
-    avatarUrl: "",
+    avatarUrl: DEFAULT_AVATAR_URL,
   });
 
   const [isEditing, setIsEditing] = useState(false);
@@ -18,16 +20,13 @@ const ProfileTab = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [avatarFile, setAvatarFile] = useState(null);
   const apiUrl = import.meta.env.VITE_API_URL;
-  // Lấy token từ localStorage
   const token = localStorage.getItem("token");
 
-  // Cấu hình axios instance với baseURL
   const axiosInstance = axios.create({
     baseURL: `${apiUrl}/lms`,
     headers: { "Content-Type": "application/json" },
   });
 
-  // Interceptor để thêm token vào header
   axiosInstance.interceptors.request.use(
     (config) => {
       if (token) {
@@ -38,7 +37,6 @@ const ProfileTab = () => {
     (error) => Promise.reject(error)
   );
 
-  // Hàm gọi API lấy thông tin người dùng với axios (POST)
   const fetchUserProfile = async () => {
     if (!token) {
       setErrorMessage("Bạn chưa đăng nhập. Vui lòng đăng nhập để tiếp tục.");
@@ -48,17 +46,9 @@ const ProfileTab = () => {
 
     try {
       setIsLoading(true);
-      const response = await axiosInstance.post("/users/my-info",
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-    let userData = response.data.result;
-    console.log(userData);
+      const response = await axiosInstance.post("/users/my-info", {});
+      let userData = response.data.result;
+      userData.avatarUrl = userData.avatarUrl || DEFAULT_AVATAR_URL;
       setUser(userData);
       setFormData(userData);
     } catch (error) {
@@ -73,7 +63,6 @@ const ProfileTab = () => {
     }
   };
 
-  // Hàm gọi API cập nhật thông tin người dùng
   const updateUserProfile = async () => {
     try {
       setIsLoading(true);
@@ -84,7 +73,6 @@ const ProfileTab = () => {
         birthDate: formData.birthDate,
       });
 
-      console.log("response:", response.data);
       if (!response.data || !response.data.result) {
         throw new Error("Dữ liệu trả về không đúng định dạng mong muốn.");
       }
@@ -98,13 +86,11 @@ const ProfileTab = () => {
         error.message ||
         "Có lỗi xảy ra khi cập nhật thông tin. Vui lòng thử lại.";
       setErrorMessage(errorMsg);
-      console.error("Error updating profile:", errorMsg, error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Hàm upload avatar
   const handleAvatarUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -114,26 +100,17 @@ const ProfileTab = () => {
         const formDataToUpload = new FormData();
         formDataToUpload.append("avatar", file);
 
-        const response = await axiosInstance.post(
-          "/users/upload-avatar",
-          formDataToUpload,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-          }
-        );
+        const response = await axiosInstance.post("/users/upload-avatar", formDataToUpload, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
 
         if (!response.data || !response.data.result) {
           throw new Error("Dữ liệu trả về không đúng định dạng mong muốn.");
         }
 
-        setFormData((prev) => ({
-          ...prev,
-          avatarUrl: response.data.result.avatarUrl,
-        }));
-        setUser((prev) => ({
-          ...prev,
-          avatarUrl: response.data.result.avatarUrl,
-        }));
+        const newAvatarUrl = response.data.result.avatarUrl || DEFAULT_AVATAR_URL;
+        setFormData((prev) => ({ ...prev, avatarUrl: newAvatarUrl }));
+        setUser((prev) => ({ ...prev, avatarUrl: newAvatarUrl }));
         setSuccessMessage("Cập nhật avatar thành công!");
       } catch (error) {
         const errorMsg =
@@ -141,7 +118,6 @@ const ProfileTab = () => {
           error.message ||
           "Lỗi khi tải lên avatar. Vui lòng thử lại.";
         setErrorMessage(errorMsg);
-        console.error("Error uploading avatar:", errorMsg, error);
       } finally {
         setIsLoading(false);
       }
@@ -154,10 +130,7 @@ const ProfileTab = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleEditToggle = () => {
@@ -183,18 +156,15 @@ const ProfileTab = () => {
         <h2 className="text-2xl font-bold text-gray-800">Thông tin cá nhân</h2>
         <button
           onClick={handleEditToggle}
-          className={`px-4 py-2 rounded-lg text-sm font-medium ${
-            isEditing
-              ? "bg-gray-500 hover:bg-gray-600 text-white"
-              : "bg-blue-500 hover:bg-blue-600 text-white"
-          } transition-colors duration-200`}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
+            isEditing ? "bg-gray-500 hover:bg-gray-600 text-white" : "bg-blue-500 hover:bg-blue-600 text-white"
+          }`}
           disabled={isLoading}
         >
           {isEditing ? "Hủy" : "Chỉnh sửa"}
         </button>
       </div>
 
-      {/* Success and Error Messages */}
       {successMessage && (
         <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded-md">
           {successMessage}
@@ -213,9 +183,8 @@ const ProfileTab = () => {
       )}
 
       {!isLoading && (
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Avatar Upload */}
             <div className="md:col-span-2 flex flex-col items-center">
               <div className="relative w-36 h-36">
                 <img
@@ -256,11 +225,8 @@ const ProfileTab = () => {
               </div>
             </div>
 
-            {/* Full Name */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Họ và tên
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Họ và tên</label>
               {isEditing ? (
                 <input
                   type="text"
@@ -271,27 +237,17 @@ const ProfileTab = () => {
                   required
                 />
               ) : (
-                <p className="text-gray-900 py-2">
-                  {user.fullName || "Chưa cập nhật"}
-                </p>
+                <p className="text-gray-900 py-2">{user.fullName || "Chưa cập nhật"}</p>
               )}
             </div>
 
-            {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Email
-              </label>
-              <p className="text-gray-900 py-2">
-                {user.email || "Chưa cập nhật"}
-              </p>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+              <p className="text-gray-900 py-2">{user.email || "Chưa cập nhật"}</p>
             </div>
 
-            {/* Phone */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Số điện thoại
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Số điện thoại</label>
               {isEditing ? (
                 <input
                   type="tel"
@@ -301,17 +257,12 @@ const ProfileTab = () => {
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               ) : (
-                <p className="text-gray-900 py-2">
-                  {user.phone || "Chưa cập nhật"}
-                </p>
+                <p className="text-gray-900 py-2">{user.phone || "Chưa cập nhật"}</p>
               )}
             </div>
 
-            {/* Birth Date */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Ngày sinh
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Ngày sinh</label>
               {isEditing ? (
                 <input
                   type="date"
@@ -321,17 +272,12 @@ const ProfileTab = () => {
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               ) : (
-                <p className="text-gray-900 py-2">
-                  {user.birthDate || "Chưa cập nhật"}
-                </p>
+                <p className="text-gray-900 py-2">{user.birthDate || "Chưa cập nhật"}</p>
               )}
             </div>
 
-            {/* Address */}
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Địa chỉ
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Địa chỉ</label>
               {isEditing ? (
                 <textarea
                   name="address"
@@ -341,9 +287,7 @@ const ProfileTab = () => {
                   rows="3"
                 ></textarea>
               ) : (
-                <p className="text-gray-900 py-2">
-                  {user.address || "Chưa cập nhật"}
-                </p>
+                <p className="text-gray-900 py-2">{user.address || "Chưa cập nhật"}</p>
               )}
             </div>
           </div>
@@ -351,7 +295,7 @@ const ProfileTab = () => {
           {isEditing && (
             <div className="mt-6 flex justify-end">
               <button
-                type="submit"
+                onClick={handleSubmit}
                 disabled={isLoading}
                 className={`px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200 ${
                   isLoading ? "opacity-70 cursor-not-allowed" : ""
@@ -361,7 +305,7 @@ const ProfileTab = () => {
               </button>
             </div>
           )}
-        </form>
+        </div>
       )}
     </div>
   );
