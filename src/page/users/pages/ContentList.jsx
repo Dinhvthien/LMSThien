@@ -171,7 +171,7 @@ const ContentList = () => {
           <button
             className={`px-2 sm:px-3 py-1 sm:py-2 rounded-md font-semibold text-xs sm:text-sm transition-all duration-200 ${
               contentType === 'video'
-                ? 'bg-blue-600 text-white'
+                ? 'bg-[#F9A825] text-white'
                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
             }`}
             onClick={() => handleContentTypeChange('video')}
@@ -181,7 +181,7 @@ const ContentList = () => {
           <button
             className={`px-2 sm:px-3 py-1 sm:py-2 rounded-md font-semibold text-xs sm:text-sm transition-all duration-200 ${
               contentType === 'document'
-                ? 'bg-blue-600 text-white'
+                ? 'bg-[#F9A825] text-white'
                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
             }`}
             onClick={() => handleContentTypeChange('document')}
@@ -256,7 +256,7 @@ const ContentList = () => {
                 </div>
               </div>
               <button
-                className="text-blue-600 text-xs sm:text-sm font-medium hover:underline"
+                className="text-[#F9A825] text-xs sm:text-sm font-medium hover:underline"
                 onClick={() => handleItemClick(item)}
               >
                 {contentType === 'video' ? 'Xem video' : 'Mở tài liệu'}

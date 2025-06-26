@@ -23,15 +23,15 @@ const CourseCard = ({ course }) => {
       />
       <div className="p-2 sm:p-4">
         <Link to={`/course/${course.id}/detail`}>
-          <h3 className="text-sm sm:text-xl font-semibold text-gray-900 hover:text-blue-600 transition-colors truncate">
+          <h3 className="text-sm sm:text-xl font-semibold text-gray-900 hover:text-[#F9A825] transition-colors truncate">
             {course.title}
           </h3>
           <p className="text-xs sm:text-sm text-gray-600 mt-1 line-clamp-2">{course.description || 'Không có mô tả'}</p>
-          <div className="text-blue-600 font-bold mt-2 text-xs sm:text-sm">{formatCurrencyVND(course.price)}</div>
+          <div className="text-[#F9A825] font-bold mt-2 text-xs sm:text-sm">{formatCurrencyVND(course.price)}</div>
         </Link>
         <button
           onClick={handleAddToCart}
-          className="mt-2 w-full bg-blue-600 text-white py-1 sm:py-2 rounded-md hover:bg-blue-700 transition-colors text-xs sm:text-sm"
+          className="mt-2 w-full bg-[#F9A825] text-white py-1 sm:py-2 rounded-md hover:bg-[#b09363] transition-colors text-xs sm:text-sm"
         >
           Thêm vào giỏ hàng
         </button>

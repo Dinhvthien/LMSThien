@@ -25,23 +25,30 @@ export default function RegisterPage() {
     e.preventDefault();
     setMessage("");
 
+    // Create a new form object with fullName set to username
+    const formToSubmit = {
+      ...form,
+      fullName: form.username, // Set fullName to username
+    };
+
     try {
-      await axios.post(`${apiUrl}/lms/users`, form);
+      await axios.post(`${apiUrl}/lms/users`, formToSubmit);
       setMessage("Đăng ký thành công!");
-      navigate("/login"); // Chuyển sang trang đăng nhập
+      navigate("/login");
     } catch (error) {
       setMessage("Đăng ký thất bại. Vui lòng kiểm tra lại thông tin.");
-      error;
+      console.error(error);
     }
   };
 
   const fieldLabels = {
-    fullName: "Họ và tên",
     username: "Tên đăng nhập",
     email: "Email",
     phone: "Số điện thoại",
     passwordHash: "Mật khẩu",
   };
+
+  const isFormValid = form.email.trim() !== "" || form.phone.trim() !== "";
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -57,12 +64,17 @@ export default function RegisterPage() {
               {fieldLabels[field]}
             </label>
             <input
-              type={field === "passwordHash" ? "password" : "text"}
+              type={field === "passwordHash" ? "password" : field === "email" ? "email" : "text"}
               name={field}
               value={form[field]}
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-              placeholder={`Nhập ${fieldLabels[field].toLowerCase()}`}
+              placeholder={
+                field === "username" ? "0981790616" :
+                field === "email" ? "Nhập email" :
+                field === "phone" ? "Nhập số điện thoại" :
+                "Nhập mật khẩu"
+              }
             />
           </div>
         ))}
@@ -71,11 +83,15 @@ export default function RegisterPage() {
 
         <button
           type="submit"
-          className="w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200"
+          className={`w-full bg-[#F9A825] text-white py-2 px-4 rounded-lg transition duration-200 ${
+            isFormValid ? "hover:bg-[#e6c289]" : "opacity-50 cursor-not-allowed"
+          }`}
+          disabled={!isFormValid}
         >
           Đăng ký
         </button>
       </form>
+      
     </div>
   );
 }

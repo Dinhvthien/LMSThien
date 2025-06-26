@@ -145,7 +145,7 @@ export default function LoginPage() {
 
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
+          className="w-full bg-[#F9A825] text-white py-2 px-4 rounded-lg hover:bg-[#e6c185] transition duration-200"
         >
           Đăng nhập
         </button>
@@ -153,7 +153,7 @@ export default function LoginPage() {
         <div className="text-center mt-4">
           <div className="text-gray-500 mb-2">Hoặc</div>
           <span className="text-gray-500">Đăng ký: </span>
-          <a href="/register" className="text-blue-600 hover:underline ml-1">
+          <a href="/register" className="text-[#F9A825] hover:underline ml-1">
             Tại đây
           </a>
         </div>

@@ -46,12 +46,12 @@ const Navbar = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-white shadow-md" : "bg-neutral-950"}`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-[#D32F2F] shadow-md" : "bg-[#C62828]"}`}
     >
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link
           to="/"
-          className={`text-2xl font-bold ${isScrolled ? "text-dark-600" : "text-white"}`}
+          className={`text-2xl font-bold ${isScrolled ? "text-[#002865]" : "text-white"}`}
         >
           Đinh Văn Thiện
         </Link>
@@ -66,7 +66,7 @@ const Navbar = () => {
             <Link
               key={item.to}
               to={item.to}
-              className={`text-lg font-medium hover:text-blue-400 transition-colors ${isScrolled ? "text-gray-700" : "text-white"}`}
+              className={`text-lg font-medium hover:text-blue-400 transition-colors ${isScrolled ? "text-[#FFB300]" : "text-white"}`}
             >
               {item.label}
             </Link>
@@ -77,7 +77,7 @@ const Navbar = () => {
         <div className="hidden md:flex items-center space-x-4">
           <Link
             to="/cart"
-            className={`hover:text-blue-400 transition-colors ${isScrolled ? "text-gray-700" : "text-white"}`}
+            className={`hover:text-blue-400 transition-colors ${isScrolled ? "text-[#FFB300]" : "text-white"}`}
           >
             <div className="relative">
               <ShoppingCartIcon fontSize="medium" />
@@ -87,14 +87,14 @@ const Navbar = () => {
           {!isLoginActive ? (
             <Link
               to="/login"
-              className={`hover:text-blue-400 transition-colors ${isScrolled ? "text-gray-700" : "text-white"}`}
+              className={`hover:text-blue-400 transition-colors ${isScrolled ? "text-[#FFB300]" : "text-white"}`}
             >
               <LoginIcon fontSize="medium" />
             </Link>
           ) : (
             <Link
               to="/user/profile"
-              className={`hover:text-blue-400 transition-colors ${isScrolled ? "text-gray-700" : "text-white"}`}
+              className={`hover:text-blue-400 transition-colors ${isScrolled ? "text-[#FFB300]" : "text-white"}`}
             >
               <PersonIcon fontSize="medium" />
             </Link>
@@ -108,7 +108,7 @@ const Navbar = () => {
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
         >
           <svg
-            className={`w-8 h-8 ${isScrolled ? "text-blue-600" : "text-white"}`}
+            className={`w-8 h-8 ${isScrolled ? "text-[#002865]" : "text-white"}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

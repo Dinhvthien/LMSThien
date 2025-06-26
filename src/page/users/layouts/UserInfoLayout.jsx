@@ -40,8 +40,6 @@ const UserInfoLayout = ({ children }) => {
   const menuItems = [
     { id: 'profile', label: 'Thông tin cá nhân', path: '/user/profile' },
     { id: 'courses', label: 'Khóa học đã mua', path: '/user/purchased-courses' },
-    { id: 'orders', label: 'Lịch sử đơn hàng', path: '/user/orders' },
-    { id: 'settings', label: 'Cài đặt tài khoản', path: '/user/settings' },
   ];
 
   const handleMenuClick = (path) => {

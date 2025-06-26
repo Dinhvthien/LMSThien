@@ -133,14 +133,6 @@ const ProfileTab = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleEditToggle = () => {
-    if (isEditing) {
-      setFormData({ ...user });
-    }
-    setIsEditing(!isEditing);
-    setSuccessMessage("");
-    setErrorMessage("");
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -154,15 +146,6 @@ const ProfileTab = () => {
     <div className="bg-white shadow-lg rounded-xl p-6 max-w-4xl mx-auto my-6">
       <div className="flex justify-between items-center border-b pb-4 mb-6">
         <h2 className="text-2xl font-bold text-gray-800">Thông tin cá nhân</h2>
-        <button
-          onClick={handleEditToggle}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
-            isEditing ? "bg-gray-500 hover:bg-gray-600 text-white" : "bg-blue-500 hover:bg-blue-600 text-white"
-          }`}
-          disabled={isLoading}
-        >
-          {isEditing ? "Hủy" : "Chỉnh sửa"}
-        </button>
       </div>
 
       {successMessage && (
