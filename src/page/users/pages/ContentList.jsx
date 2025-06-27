@@ -66,6 +66,13 @@ const ContentList = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // Available sources
+  const sources = [
+    { id: '', label: 'Tất cả' },
+    { id: 'gmail', label: 'Gmail' },
+    { id: 'make', label: 'Make' },
+  ];
+
   const fetchTypes = async () => {
     try {
       const [videoTypesRes, documentTypesRes] = await Promise.all([
@@ -143,6 +150,12 @@ const ContentList = () => {
     setCurrentPage(1);
   };
 
+  const handleSourceChange = (source) => {
+    const searchValue = source ? source : ''; // Use source ID as search term, or empty string for "Tất cả"
+    setSearch(searchValue);
+    debouncedSearch(contentType, selectedType, searchValue);
+  };
+
   const handleItemClick = (item) => {
     console.log('Clicked item:', item);
     if (contentType === 'video') {
@@ -190,13 +203,30 @@ const ContentList = () => {
           </button>
         </div>
 
-        <input
-          type="text"
-          value={search}
-          onChange={handleSearchChange}
-          placeholder={`Tìm kiếm ${contentType === 'video' ? 'video' : 'tài liệu'}...`}
-          className="w-full sm:w-60 px-2 sm:px-3 py-1 sm:py-2 border border-gray-300 rounded-md bg-white text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
-        />
+        <div className="flex space-x-1 sm:space-x-2 w-full sm:w-auto">
+          <input
+            type="text"
+            value={search}
+            onChange={handleSearchChange}
+            placeholder={`Tìm kiếm ${contentType === 'video' ? 'video' : 'tài liệu'}...`}
+            className="w-full sm:w-60 px-2 sm:px-3 py-1 sm:py-2 border border-gray-300 rounded-md bg-white text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all"
+          />
+          <div className="flex space-x-1 sm:space-x-2">
+            {sources.map((source) => (
+              <button
+                key={source.id}
+                className={`px-2 sm:px-3 py-1 sm:py-2 rounded-md font-semibold text-xs sm:text-sm transition-all duration-200 ${
+                  search === source.id
+                    ? 'bg-[#F9A825] text-white'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`}
+                onClick={() => handleSourceChange(source.id)}
+              >
+                {source.label}
+              </button>
+            ))}
+          </div>
+        </div>
 
         <select
           value={selectedType}
