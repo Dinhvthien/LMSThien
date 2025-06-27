@@ -61,7 +61,7 @@ const CartPage = () => {
   };
 
     function formatCurrencyVND(amount) {
-    return amount ? amount.toLocaleString("vi-VN") + " VND" : "N/A";
+    return amount ? amount.toLocaleString("vi-VN") + " VND" : "0";
   }
   // Hàm xóa sản phẩm khỏi giỏ hàng
   const removeFromCart = async (courseId) => {
