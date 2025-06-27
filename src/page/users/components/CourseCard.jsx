@@ -4,7 +4,7 @@ import { useNotification } from '../../shared/context/NotificationContext';
 import { Link } from 'react-router-dom';
 
 function formatCurrencyVND(amount) {
-  return amount ? amount.toLocaleString("vi-VN") + " VND" : "N/A";
+  return amount ? amount.toLocaleString("vi-VN") + " VND" : "Miễn phí";
 }
 
 const CourseCard = ({ course }) => {
@@ -15,7 +15,7 @@ const CourseCard = ({ course }) => {
   if (!course) return null;
 
   return (
-    <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow overflow-hidden w-full sm:w-auto">
+    <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow overflow-hidden min-w-[80%] sm:min-w-[60%] md:min-w-[40%] lg:min-w-[30%] snap-center">
       <img
         src={course.thumbnailUrl || 'https://via.placeholder.com/300x150'}
         alt={course.title}
@@ -27,14 +27,18 @@ const CourseCard = ({ course }) => {
             {course.title}
           </h3>
           <p className="text-xs sm:text-sm text-gray-600 mt-1 line-clamp-2">{course.description || 'Không có mô tả'}</p>
-          <div className="text-[#F9A825] font-bold mt-2 text-xs sm:text-sm">{formatCurrencyVND(course.price)}</div>
+          {course.price !== 0 && (
+            <div className="text-[#F9A825] font-bold mt-2 text-xs sm:text-sm">{formatCurrencyVND(course.price)}</div>
+          )}
         </Link>
-        <button
-          onClick={handleAddToCart}
-          className="mt-2 w-full bg-[#F9A825] text-white py-1 sm:py-2 rounded-md hover:bg-[#b09363] transition-colors text-xs sm:text-sm"
-        >
-          Thêm vào giỏ hàng
-        </button>
+        {course.price !== 0 && (
+          <button
+            onClick={handleAddToCart}
+            className="mt-2 w-full bg-[#F9A825] text-white py-1 sm:py-2 rounded-md hover:bg-[#b09363] transition-colors text-xs sm:text-sm"
+          >
+            Thêm vào giỏ hàng
+          </button>
+        )}
       </div>
     </div>
   );

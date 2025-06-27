@@ -2,11 +2,11 @@ import React from "react";
 import { Button } from "@mui/material";
 import axios from "axios";
 
-const CourseSideVideo = ({ courseList, selectedVideoUrl, isEnrolled }) => {
-  function formatCurrencyVND(amount) {
-    return amount ? amount.toLocaleString("vi-VN") + " VND" : "N/A";
-  }
+function formatCurrencyVND(amount) {
+  return amount ? amount.toLocaleString("vi-VN") + " VND" : "Miễn phí";
+}
 
+const CourseSideVideo = ({ courseList, selectedVideoUrl, isEnrolled }) => {
   const handleAddToCart = async () => {
     const apiUrl = import.meta.env.VITE_API_URL;
     try {
@@ -31,14 +31,14 @@ const CourseSideVideo = ({ courseList, selectedVideoUrl, isEnrolled }) => {
 
   if (!courseList) {
     console.log("CourseSideVideo: No courseList data");
-    return <div className="text-base sm:text-lg">Không có dữ liệu khóa học.</div>;
+    return <div className="text-base sm:text-lg text-gray-600">Không có dữ liệu khóa học.</div>;
   }
 
   const videoSrc = selectedVideoUrl || courseList.videoUrl || "https://www.youtube.com/embed/3Z0ZBBLOcrQ?si=y3FI-Ex_ed2ByHPI";
   console.log("CourseSideVideo: Video src", videoSrc, "isEnrolled", isEnrolled);
 
   return (
-    <div className="w-full md:w-3/4 h-64 sm:h-screen m-1 sm:m-2">
+    <div className="w-full md:w-3/4 m-1 sm:m-2">
       <div className="h-48 sm:h-[80%] bg-blue-500 m-2 sm:m-4 rounded-md">
         <iframe
           width="100%"
@@ -56,14 +56,16 @@ const CourseSideVideo = ({ courseList, selectedVideoUrl, isEnrolled }) => {
           <h2 className="text-lg sm:text-2xl font-semibold text-gray-800 mb-1 sm:mb-2">
             {courseList.title || "Chưa có tiêu đề"}
           </h2>
-          <p className="text-sm sm:text-gray-600 line-clamp-2">{courseList.description || "Chưa có mô tả"}</p>
+          <p className="text-sm sm:text-base text-gray-600 line-clamp-2">{courseList.description || "Chưa có mô tả"}</p>
         </div>
-        <div className="text-right">
-          <h1 className="text-lg sm:text-2xl font-bold text-red-600">
-            {formatCurrencyVND(courseList.price)}
-          </h1>
-        </div>
-        {!isEnrolled && (
+        {courseList.price !== 0 && (
+          <div className="text-right">
+            <h1 className="text-lg sm:text-2xl font-bold text-red-600">
+              {formatCurrencyVND(courseList.price)}
+            </h1>
+          </div>
+        )}
+        {!isEnrolled && courseList.price !== 0 && (
           <div>
             <Button
               onClick={handleAddToCart}

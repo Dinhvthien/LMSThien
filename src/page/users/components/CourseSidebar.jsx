@@ -84,12 +84,12 @@ const CourseSidebar = ({ onDataFetched, onVideoSelect, onEnrollmentStatus }) => 
     checkEnrollment();
   }, [id, onDataFetched, onVideoSelect, onEnrollmentStatus]);
 
-  if (loading) return <p className="text-base sm:text-lg">Đang tải...</p>;
-  if (error) return <p className="text-base sm:text-lg">Lỗi: {error}</p>;
-  if (!courseData) return <p className="text-base sm:text-lg">Không có dữ liệu khóa học.</p>;
+  if (loading) return <p className="text-base sm:text-lg text-gray-600">Đang tải...</p>;
+  if (error) return <p className="text-base sm:text-lg text-gray-600">Lỗi: {error}</p>;
+  if (!courseData) return <p className="text-base sm:text-lg text-gray-600">Không có dữ liệu khóa học.</p>;
 
   return (
-    <div className="w-full md:w-1/4 h-auto md:h-screen mt-[200px] sm:mt-0 m-1 sm:m-2 overflow-y-auto md:overflow-y-auto ">
+    <div className="w-full md:w-1/4 h-auto md:h-screen m-0 sm:m-1 overflow-y-auto md:overflow-y-auto">
       <div className="max-w-5xl mx-auto p-2 sm:p-4 space-y-4 sm:space-y-6">
         {courseData.sections.map((section, sectionIndex) => (
           <div

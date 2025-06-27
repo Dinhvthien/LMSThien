@@ -60,7 +60,7 @@ const Navbar = () => {
         <nav className="hidden md:flex space-x-10">
           {[
             { to: "/home", label: "Trang chủ" },
-            { to: "/course", label: "Khóa Học" },
+            { to: "/course", label: "Kỹ năng sau thực tập" },
             { to: "/document", label: "Tài Liệu" }
           ].map((item) => (
             <Link
@@ -138,7 +138,7 @@ const Navbar = () => {
           <nav className="container mx-auto px-4 py-6 flex flex-col space-y-4">
             {[
               { to: "/home", label: "Trang chủ" },
-              { to: "/course", label: "Khóa Học" },
+              { to: "/course", label: "Kỹ năng sau thực tập" },
               { to: "/document", label: "Tài Liệu" },
                { to: "/login", label: "Đăng nhập" },
                 { to: "/cart", label: "Giỏ hàng" }, 
