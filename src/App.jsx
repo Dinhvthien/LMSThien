@@ -8,7 +8,7 @@ import AccessDeniedPage from './page/users/pages/AccessDeniedPage';
 
 function App() {
   return (
-    // <AuthProvider>
+  <AuthProvider>
       <NotificationProvider>
         <Routes>  
           <Route path="/" element={<Navigate to="/home" replace />} />
@@ -22,7 +22,7 @@ function App() {
           <Route path="*" element={<div>404 - Trang không tồn tại</div>} />
         </Routes>
       </NotificationProvider>
-    /* </AuthProvider> */
+      </AuthProvider>
   );
 }
 
