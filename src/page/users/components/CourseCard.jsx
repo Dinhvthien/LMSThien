@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { addToCart } from '../../../utils/addtocart';
-import { useNotification } from '../../shared/context/NotificationContext';
 import { Link } from 'react-router-dom';
 import emailjs from '@emailjs/browser';
 import { ToastContainer, toast } from 'react-toastify';
@@ -11,7 +9,6 @@ function formatCurrencyVND(amount) {
 }
 
 const CourseCard = ({ course }) => {
-  const { showNotification } = useNotification();
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -20,17 +17,13 @@ const CourseCard = ({ course }) => {
     message: ''
   });
 
-  const handleAddToCart = () => {
-    addToCart(course.id, course.title, course.description, course.price, course.thumbnailUrl, showNotification);
-  };
-
   const checkEmailSent = (action) => {
     const hasSentEmail = localStorage.getItem('hasSentEmail');
     if (!hasSentEmail) {
       setShowModal(true);
     } else {
-      if (action === 'addToCart') handleAddToCart();
       if (action === 'navigate') window.location.href = `/course/${course.id}/detail`;
+      // Removed handleAddToCart for 'addToCart' action
     }
   };
 
@@ -70,7 +63,7 @@ const CourseCard = ({ course }) => {
           });
           localStorage.setItem('hasSentEmail', 'true');
           setShowModal(false);
-          handleAddToCart(); // Tùy ý bạn có muốn thêm khi gửi xong
+          // Removed handleAddToCart call here
         },
         (error) => {
           toast.error('Lỗi khi gửi thông tin, vui lòng thử lại.', {
@@ -118,8 +111,9 @@ const CourseCard = ({ course }) => {
 
         {course.price !== 0 && (
           <button
-            onClick={() => checkEmailSent('addToCart')}
+            // Removed onClick handler to disable add to cart
             className="mt-2 w-full bg-[#F9A825] text-white py-1 sm:py-2 rounded-md hover:bg-[#b09363] transition-colors text-xs sm:text-sm"
+            disabled // Optionally disable the button
           >
             Thêm vào giỏ hàng
           </button>
